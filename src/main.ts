@@ -1,3 +1,5 @@
+
+import { Priority } from './types';
 /**
  * NOTE to self
  * Make a module and import the functions from the module
@@ -13,15 +15,35 @@
 
 
 // 1 Import the CSS file: This ensures that the styles are applied to the HTML elements.
+
+
 import './style.css';
+const form = document.querySelector('.todo-form') as HTMLFormElement
+const input = document.getElementById('todo-input') as HTMLInputElement
+const prioritySelect = document.getElementById('priority-select') as HTMLSelectElement
+const listEl = document.getElementById('todo-list') as HTMLUListElement
+const sortBtn = document.getElementById('sortByPriority') as HTMLButtonElement
+
+const getSelectedPriority = (): Priority => {
+  return (document.getElementById('priority-select') as HTMLSelectElement)
+    .value as Priority;
+};
+
+
+
 
 // Step 2: Define the Todo interface
 // Define the Todo interface: This interface defines the structure of a todo item.
+// Priority union for the app
+type Priority = 'low' | 'medium' | 'high';
+
 export interface Todo {
   id: number;
   text: string;
   completed: boolean;
+  priority?: Priority;   // ← optional property (for KW video)
 }
+
 
 // Step 3: Initialize an empty array to store todos
 // Initialize an empty array: This array will store the list of todos.
@@ -41,15 +63,19 @@ const todoList = document.getElementById('todo-list') as HTMLUListElement;   // 
 // Step 5: Function to add a new todo
 // Function to add a new todo: This function creates a new todo object and adds it to the array.
 export const addTodo = (text: string): void => {
+  const priority = getSelectedPriority();
+
   const newTodo: Todo = {
-    id: Date.now(), // Generate a unique ID based on the current timestamp
-    text: text,
+    id: Date.now(),
+    text,
     completed: false,
+    priority, // ← NEW
   };
+
   todos.push(newTodo);
-  console.log("Todo added: ", todos); // Log the updated list of todos to the console
-  renderTodos(); // Render the updated list of todos => create the function next
+  renderTodos();
 };
+
 
 // Step 6: Function to render the list of todos
 // Function to render the list of todos: This function updates the DOM to display the current list of todos.
@@ -67,11 +93,25 @@ const renderTodos = (): void => { // void because no return - what we are doing 
       <button>Remove</button>
          <button id="editBtn">Edit</button>
     `;
+    // show priority badge
+const priorityBadge = document.createElement('span');
+priorityBadge.style.marginLeft = '8px';
+priorityBadge.textContent = `[${todo.priority ?? 'medium'}]`;
+li.appendChild(priorityBadge);
+
     // addRemoveButtonListener is further down in the code. We have onclick in the function instead of template literals. More safe to use addEventListener.
     addRemoveButtonListener(li, todo.id); // Add event listener to the remove button. li is the parent element, and todo.id is the ID of the todo. 
     addEditButtonListener(li, todo.id); // Add event listener to the remove button. li is the parent element, and todo.id is the ID of the todo. 
     todoList.appendChild(li); // Append the list item to the ul element
   });
+  sortBtn?.addEventListener('click', () => {
+    const rank: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+    todos = [...todos].sort(
+      (a, b) => rank[a.priority ?? 'medium'] - rank[b.priority ?? 'medium']
+    );
+    renderTodos();
+  });
+  
 };
 
 // Step 6.1: Function to render the list of todos
