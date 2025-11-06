@@ -21,17 +21,27 @@ export interface Todo {
   id: number;
   text: string;
   completed: boolean;
+  dueDate?: string; 
 }
 
+
 // Step 3: Initialize an empty array to store todos
-// Initialize an empty array: This array will store the list of todos.
 export let todos: Todo[] = [];
 
+const isOverdue = (todo: Todo): boolean => {
+  if (!todo.dueDate || todo.completed) return false;
+  const due = new Date(`${todo.dueDate}T23:59:59`);
+  return !Number.isNaN(due.getTime()) && due.getTime() < Date.now();
+};  
+// Initialize an empty array: This array will store the list of todos.
+
+
 // Step 4: Get references to the HTML elements
-// Get references to the HTML elements: These references will be used to interact with the DOM
 const todoInput = document.getElementById('todo-input') as HTMLInputElement; // exist in HTML file
 const todoForm = document.querySelector('.todo-form') as HTMLFormElement;    // exist in HTML file
 const todoList = document.getElementById('todo-list') as HTMLUListElement;   // exist in HTML file
+// Get references to the HTML elements: These references will be used to interact with the DOM
+
 
 
 
@@ -39,17 +49,19 @@ const todoList = document.getElementById('todo-list') as HTMLUListElement;   // 
 
 
 // Step 5: Function to add a new todo
-// Function to add a new todo: This function creates a new todo object and adds it to the array.
-export const addTodo = (text: string): void => {
+export const addTodo = (text: string, dueDate?: string): void => {
   const newTodo: Todo = {
-    id: Date.now(), // Generate a unique ID based on the current timestamp
-    text: text,
+    id: Date.now(),
+    text,
     completed: false,
+    dueDate 
   };
+
   todos.push(newTodo);
-  console.log("Todo added: ", todos); // Log the updated list of todos to the console
-  renderTodos(); // Render the updated list of todos => create the function next
+  renderTodos();
 };
+
+// Function to add a new todo: This function creates a new todo object and adds it to the array.
 
 // Step 6: Function to render the list of todos
 // Function to render the list of todos: This function updates the DOM to display the current list of todos.
@@ -67,6 +79,26 @@ const renderTodos = (): void => { // void because no return - what we are doing 
       <button>Remove</button>
          <button id="editBtn">Edit</button>
     `;
+    
+    // show due date (if present)
+if (todo.dueDate) {
+  const due = document.createElement('span');
+  due.style.marginLeft = '8px';
+  due.textContent = `(due: ${todo.dueDate})`;
+  li.appendChild(due);
+}
+
+// highlight if overdue
+if (isOverdue(todo)) {
+  li.style.color = 'red';
+  li.style.fontWeight = '600';
+  li.title = 'Overdue';
+} else {
+  li.style.removeProperty('color');
+  li.style.removeProperty('font-weight');
+  li.removeAttribute('title');
+}
+
     // addRemoveButtonListener is further down in the code. We have onclick in the function instead of template literals. More safe to use addEventListener.
     addRemoveButtonListener(li, todo.id); // Add event listener to the remove button. li is the parent element, and todo.id is the ID of the todo. 
     addEditButtonListener(li, todo.id); // Add event listener to the remove button. li is the parent element, and todo.id is the ID of the todo. 
@@ -83,35 +115,29 @@ renderTodos(); // Call the renderTodos function to display the initial list of t
 
 // Step 7: Event listener for the form submission
 // Event listener for the form submission: This listener handles the form submission, adds the new todo, and clears the input field.
-todoForm.addEventListener('submit', (event: Event) => {
-  event.preventDefault(); // Prevent the default form submission behavior
-  const text = todoInput.value.trim(); // Get the value of the input field and remove any leading or trailing whitespace - not needed, but good practice
-  if (text !== '') { // Check if the input field is not empty. Sort of a reverse falsey
-    addTodo(text);
-    todoInput.value = ''; // Clear the input field
-  }
-});
-
 //Improved code for step 7 - user input validation - move the error message to the top of the Typescript file
 const errorMessage = document.getElementById('error-message') as HTMLParagraphElement; // Should be moved to the top + added to the HTML file
 
 todoForm.addEventListener('submit', (event: Event) => {
-  event.preventDefault(); // Prevent the default form submission behavior
-  const text = todoInput.value.trim(); // Get the value of the input field and remove any leading or trailing whitespace
+  event.preventDefault();
 
-  if (text !== '') { // Check if the input field is empty
-    todoInput.classList.remove('input-error'); // Remove the error highlight if present
-    errorMessage.style.display = 'none'; // Hide the error message
-    addTodo(text); // Add the todo item
-    todoInput.value = ''; // Clear the input field
+  const text = todoInput.value.trim();
+  const dueDate = (document.getElementById('due-date') as HTMLInputElement).value;
+
+  if (text !== '') {
+    todoInput.classList.remove('input-error');
+    errorMessage.style.display = 'none';
+
+    addTodo(text, dueDate); 
+
+    todoInput.value = '';
+    (document.getElementById('due-date') as HTMLInputElement).value = '';
   } else {
-    console.log("Please enter a todo item"); // Provide feedback to the user
-    todoInput.classList.add('input-error'); // Add a class to highlight the error
-    errorMessage.style.display = 'block'; // Show the error message
+    console.log("Please enter a todo item");
+    todoInput.classList.add('input-error');
+    errorMessage.style.display = 'block';
   }
 });
-
-
 
 // Step 8: Function to removes all a todo by ID
 // Function to add event listener to the remove button - this function has an callback function that removes the todo item from the array.
