@@ -11,21 +11,21 @@
       <h1>Todo App</h1>
 
       <form class="todo-form">
-        <!-- Priority dropdown (ONE instance, not inside the button) -->
+        <!-- Due date -->
+        <input type="date" id="due-date" />
+
+        <!-- Priority -->
         <select id="priority-select">
           <option value="low">Low</option>
           <option value="medium" selected>Medium</option>
           <option value="high">High</option>
         </select>
 
-        <!-- Your todo text input -->
+        <!-- Todo text -->
         <input type="text" id="todo-input" placeholder="Add a new todo" />
-
-        <!-- Submit button -->
         <button type="submit">Add</button>
       </form>
 
-      <!-- (Optional) sort button -->
       <button id="sortByPriority">Sort by priority</button>
 
       <!-- error handling message : CSS added:: .input-error & #error-message -->
