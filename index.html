@@ -9,22 +9,33 @@
   <body>
     <div class="container">
       <h1>Todo App</h1>
+
       <form class="todo-form">
+        <!-- Priority dropdown (ONE instance, not inside the button) -->
+        <select id="priority-select">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <!-- Your todo text input -->
         <input type="text" id="todo-input" placeholder="Add a new todo" />
+
+        <!-- Submit button -->
         <button type="submit">Add</button>
       </form>
-      <select id="priority-select">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
-      </select>      
+
+      <!-- (Optional) sort button -->
       <button id="sortByPriority">Sort by priority</button>
+
       <!-- error handling message : CSS added:: .input-error & #error-message -->
       <p id="error-message">Please enter a todo item</p>
+
       <ul class="todo-list" id="todo-list"></ul>
 
       <input type="color" id="colorPicker" />
     </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
