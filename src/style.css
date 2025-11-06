@@ -93,3 +93,53 @@ h1 {
   margin-top: 5px;
   display: none;
 }
+
+/* ---- minimal tweaks for date/priority layout (append at end) ---- */
+
+/* Give the card a little more room */
+:root { --container-width: 640px; }
+
+/* Keep the existing flex form, just add spacing + wrap when needed */
+.todo-form {
+  gap: 10px;              /* space between controls */
+  align-items: center;
+  flex-wrap: wrap;        /* so it wraps on small screens */
+}
+
+/* Make the text field flex, keep date/select compact */
+#todo-input { flex: 1; min-width: 220px; }
+.todo-form input[type="date"],
+.todo-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Keep the Add button tidy */
+.todo-form button[type="submit"] { white-space: nowrap; }
+
+/* If you show a Sort button under the form, give it a little top space */
+#sortByPriority { margin-top: 10px; }
+
+/* Optional: simple badges for priority/due labels next to each todo */
+.priority-badge,
+.due-badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #eee;
+  margin-left: 6px;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.priority-badge.low    { background: #e0f2fe; color: #075985; }
+.priority-badge.medium { background: #fef9c3; color: #854d0e; }
+.priority-badge.high   { background: #fee2e2; color: #b91c1c; }
+
+/* keep overdue rows readable with your existing button styles */
+.todo-item[title="Overdue"] { color: #ef4444; font-weight: 600; }
+.todo-item[title="Overdue"] button { color: inherit; }
+
+#search { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 3px; }
+.filters { margin-top: 8px; display: flex; gap: 6px; }
+.filter-btn.active { font-weight: 600; }
