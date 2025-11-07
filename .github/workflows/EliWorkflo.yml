@@ -51,6 +51,9 @@ jobs:
     runs-on: ubuntu-22.04
     environment: Live
     steps:
+
+      - name: List files after build
+        run: ls -R
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
