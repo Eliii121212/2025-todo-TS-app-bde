@@ -39,32 +39,63 @@ body {
   width: var(--container-width);
 }
 
-
 h1 {
   text-align: center;
 }
+
+/* ✅ FORM FIX (input + button same row) */
 .todo-form {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
 }
-.todo-form input {
-  flex: 1;
+
+/* 1) Text input takes full width next to button */
+#todo-input {
+  order: 0;
+  flex: 1 1 auto;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
+  min-width: 0;
 }
-.todo-form button {
-  padding: 10px;
+
+/* 2) Add button stays on same row */
+.todo-form button[type="submit"] {
+  order: 1;
+  flex: 0 0 auto;
+  padding: 10px 16px;
   border: none;
   background: #28a745;
   color: #fff;
   border-radius: 3px;
   cursor: pointer;
+  white-space: nowrap;
 }
+
+/* 3) Second row: date + priority dropdown */
+#due-date {
+  order: 2;
+  flex: 1 1 140px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#priority-select {
+  order: 3;
+  flex: 0 0 120px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
 .todo-list {
   list-style: none;
   padding: 0;
 }
+
 .todo-item {
   background: #f9f9f9;
   padding: 10px;
@@ -73,6 +104,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+
 .todo-item button {
   border: none;
   background: #dc3545;
@@ -81,10 +113,9 @@ h1 {
   cursor: pointer;
 }
 
-
 .input-error {
   border: 2px solid red;
-  background-color: #ffe6e6; /* Optional: Light red background to indicate error */
+  background-color: #ffe6e6;
 }
 
 #error-message {
@@ -92,4 +123,31 @@ h1 {
   font-size: 0.9em;
   margin-top: 5px;
   display: none;
+}
+/* --- Feature Buttons --- */
+#clearCompleted,
+#sortByPriority {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  transition: 0.2s ease-in-out;
+}
+
+/* Red button: Clear Completed */
+#clearCompleted {
+  background: #ae4cff;
+}
+#clearCompleted:hover {
+  background: #ae4cff;
+}
+
+/* Blue button: Sort by Priority */
+#sortByPriority {
+  background: #0d6efd;
+}
+#sortByPriority:hover {
+  background: #0a58ca;
 }
