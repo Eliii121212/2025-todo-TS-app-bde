@@ -1,10 +1,18 @@
 import { addTodo, renderTodos } from './todos';
-import { todos, saveTodos } from './storage';
+import { todos, saveTodos, saveBackgroundColor, loadBackgroundColor } from './storage';
 import { todoForm, todoInput, clearBtn, sortBtn, errorMessage } from './dom';
 import type { Priority } from './types';
 
 export const initUI = (): void => {
   renderTodos();
+
+
+  const savedColor = loadBackgroundColor();
+  if (savedColor) {
+    document.body.style.backgroundColor = savedColor;
+    const colorPicker = document.getElementById('colorPicker') as HTMLInputElement;
+    if (colorPicker) colorPicker.value = savedColor;
+  }
 
   // Form submit
   todoForm.addEventListener('submit', (event: Event) => {
@@ -24,14 +32,14 @@ export const initUI = (): void => {
     }
   });
 
-  // Clear completed
+ 
   clearBtn?.addEventListener('click', () => {
     todos.splice(0, todos.length, ...todos.filter(t => !t.completed));
     saveTodos();
     renderTodos();
   });
 
-  // Sort by priority
+  
   sortBtn?.addEventListener('click', () => {
     const rank: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
     todos.sort(
@@ -41,12 +49,14 @@ export const initUI = (): void => {
     renderTodos();
   });
 
-  // Color picker
+
   const colorPicker = document.getElementById('colorPicker') as HTMLInputElement;
   if (colorPicker) {
     colorPicker.addEventListener('input', (e) => {
       const target = e.target as HTMLInputElement;
-      document.body.style.backgroundColor = target.value;
+      const color = target.value;
+      document.body.style.backgroundColor = color;
+      saveBackgroundColor(color); // uloží do localStorage
     });
   }
 };
