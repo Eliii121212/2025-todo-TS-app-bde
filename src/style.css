@@ -151,3 +151,31 @@ h1 {
 #sortByPriority:hover {
   background: #0a58ca;
 }
+
+/*Spacing between buttons*/
+.todo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; 
+  align-items: center;
+}
+
+#due-date {
+  flex: 1 1 140px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 6px;
+}
+#priority-select {
+  flex: 1 1 140px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 6px;
+}
+#clearCompleted,
+#sortByPriority {
+  margin-top: 8px;
+  margin-right: 6px; 
+}
