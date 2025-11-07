@@ -14,13 +14,17 @@ on:
 
 jobs:
   integration-delivery:
-    runs-on: ubuntu-latest
+
+    runs-on: ubuntu-22.04
     environment: Test
-    container:
-      image: node
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
 
       - name: Install dependencies
         run: npm install
@@ -36,3 +40,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
           server-dir: /public_html/
+
+      - name: Run TestCafe Tests
+        uses: DevExpress/testcafe-action@latest
+        with:
+          args: "chrome test/*"
