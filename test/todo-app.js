@@ -1,7 +1,7 @@
 import { Selector } from "testcafe";
 
 fixture('Todo App Tests')
-  .page('https://dominikgraphic.com/');
+  .page('http://pro-suite.dk/');
 
 test('App should load and show the main page', async t => {
   await t.wait(5000);
