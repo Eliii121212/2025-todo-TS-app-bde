@@ -46,22 +46,4 @@ jobs:
         with:
           args: "chrome test/*"
         
-  deployment:
-    needs: integration-delivery
-    runs-on: ubuntu-22.04
-    environment: Live
-    steps:
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: FTP deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ vars.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
-          local-dir: dist/
+  
