@@ -3,7 +3,9 @@ name: EliWorkflow
 on: 
   push:
     branches:
-      - main
+      - develop
+    feature:
+      - main  
   
 jobs:
   integration-delivery:
